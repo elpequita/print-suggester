@@ -1,0 +1,12 @@
+node_modules
+dist
+.turbo
+.env
+.env.local
+.DS_Store
+*.log
+.expo
+.expo-shared
+ios/Pods
+android/.gradle
+android/build
