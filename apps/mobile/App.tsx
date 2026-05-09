@@ -16,7 +16,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
 import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query';
-import type { AccessoryCategory, PrintResult, SearchResponse } from '@print-suggester/shared';
+import type { AccessoryCategory, PrintResult, SearchResponse } from './types';
 
 const C = {
   bg: '#08080c',

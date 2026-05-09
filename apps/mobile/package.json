@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
-    "@print-suggester/shared": "workspace:*",
     "@tanstack/react-query": "^5.62.0",
     "expo": "~54.0.33",
     "expo-build-properties": "~1.0.0",
@@ -22,6 +21,7 @@
     "expo-image-picker": "~17.0.0",
     "expo-linear-gradient": "~15.0.0",
     "expo-status-bar": "~3.0.9",
+    "expo-updates": "~29.0.17",
     "expo-web-browser": "~15.0.0",
     "react": "19.1.0",
     "react-native": "0.81.5",
