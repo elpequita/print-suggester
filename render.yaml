@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: print-suggester-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: pnpm install --frozen-lockfile=false && pnpm --filter @print-suggester/api build
+    startCommand: pnpm --filter @print-suggester/api start
+    autoDeployTrigger: commit
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: PORT
+        value: 10000
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+      - key: LOG_LEVEL
+        value: info
