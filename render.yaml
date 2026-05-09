@@ -14,9 +14,11 @@ services:
         value: 22
       - key: PORT
         value: 10000
-      - key: ANTHROPIC_API_KEY
+      - key: GOOGLE_API_KEY
         sync: false
-      - key: ANTHROPIC_MODEL
-        value: claude-sonnet-4-6
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: RATE_LIMIT_PER_HOUR
+        value: 20
       - key: LOG_LEVEL
         value: info

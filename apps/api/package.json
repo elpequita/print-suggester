@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
+    "@google/generative-ai": "^0.21.0",
     "@hono/node-server": "^1.13.7",
     "@print-suggester/shared": "workspace:*",
     "dotenv": "^16.4.7",

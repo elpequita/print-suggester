@@ -11,11 +11,24 @@ import { analyzeImage, type SupportedMediaType } from '../lib/vision.js';
 import { searchPrintables } from '../sources/printables.js';
 import { makerworldDeepLinkResult } from '../sources/makerworld.js';
 import { rankResults } from '../lib/ranker.js';
+import { checkRateLimit } from '../lib/ratelimit.js';
 import { logger } from '../logger.js';
 
 export const searchesRoute = new Hono();
 
 searchesRoute.post('/', async (c) => {
+  const clientKey =
+    c.req.header('x-forwarded-for')?.split(',')[0]?.trim() ||
+    c.req.header('cf-connecting-ip') ||
+    c.req.header('x-real-ip') ||
+    'anonymous';
+  const limit = checkRateLimit(clientKey);
+  c.header('x-ratelimit-remaining', String(limit.remaining));
+  c.header('x-ratelimit-reset', String(limit.resetAt));
+  if (!limit.allowed) {
+    return c.json({ error: 'Rate limit exceeded. Try again in an hour.' }, 429);
+  }
+
   const body = await c.req.json().catch(() => null);
   const parsed = searchRequestSchema.safeParse(body);
   if (!parsed.success) {
