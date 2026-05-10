@@ -3,17 +3,13 @@ import { config } from '../config.js';
 import { logger } from '../logger.js';
 import type { PrintResult } from '../schemas.js';
 
-// Printables exposes a GraphQL endpoint at /graphql/ but does not publish a public
-// schema. The exact operations are reverse-engineered from web client traffic and
-// change over time. This module wraps the call defensively: if the request shape
-// breaks, the rest of the pipeline (vision + MakerWorld deep links) still works.
-//
-// To enable real results, capture a "search prints" GraphQL operation from
-// printables.com devtools and replace SEARCH_QUERY + the response mapping below.
+// Printables' GraphQL endpoint at api.printables.com/graphql/ is undocumented but
+// supports introspection. The real search operation is `searchPrints2`. We sort by
+// popularity by default (`POPULAR`) since this drives a "discover" feed.
 
 const SEARCH_QUERY = `
-  query SearchModels($query: String!, $limit: Int) {
-    searchPrints(query: $query, limit: $limit) {
+  query SearchPrints($query: String!, $limit: Int, $ordering: SearchChoicesEnum) {
+    searchPrints2(query: $query, limit: $limit, ordering: $ordering) {
       items {
         id
         slug
@@ -50,16 +46,26 @@ export async function searchPrintables(query: string, limit = 8): Promise<PrintR
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'user-agent': 'PrintSuggester/0.1 (+https://example.com)',
+        'user-agent': 'PrintSuggester/0.1',
       },
-      body: JSON.stringify({ query: SEARCH_QUERY, variables: { query, limit } }),
+      body: JSON.stringify({
+        query: SEARCH_QUERY,
+        variables: { query, limit, ordering: 'POPULAR' },
+      }),
     });
     if (!res.ok) {
       logger.warn('printables.http', { status: res.status, query });
       return [];
     }
-    const json = (await res.json()) as { data?: { searchPrints?: { items?: RawItem[] } } };
-    const items = json.data?.searchPrints?.items ?? [];
+    const json = (await res.json()) as {
+      data?: { searchPrints2?: { items?: RawItem[] } };
+      errors?: unknown;
+    };
+    if (json.errors) {
+      logger.warn('printables.graphql.errors', { query, errors: json.errors });
+      return [];
+    }
+    const items = json.data?.searchPrints2?.items ?? [];
 
     const results: PrintResult[] = items
       .filter((it): it is RawItem & { id: string | number; name: string } =>
@@ -69,7 +75,9 @@ export async function searchPrintables(query: string, limit = 8): Promise<PrintR
         source: 'printables' as const,
         category: query,
         title: it.name,
-        url: `https://www.printables.com/model/${it.id}-${it.slug ?? ''}`,
+        url: it.slug
+          ? `https://www.printables.com/model/${it.id}-${it.slug}`
+          : `https://www.printables.com/model/${it.id}`,
         thumbnail: it.image?.filePath
           ? `https://media.printables.com/${it.image.filePath}`
           : undefined,
