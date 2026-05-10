@@ -50,7 +50,7 @@ export async function searchPrintables(query: string, limit = 8): Promise<PrintR
       },
       body: JSON.stringify({
         query: SEARCH_QUERY,
-        variables: { query, limit, ordering: 'POPULAR' },
+        variables: { query, limit, ordering: 'popular' },
       }),
     });
     if (!res.ok) {
