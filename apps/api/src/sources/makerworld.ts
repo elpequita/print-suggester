@@ -1,4 +1,4 @@
-import type { PrintResult } from '@print-suggester/shared';
+import type { PrintResult } from '../schemas.js';
 
 export function makerworldSearchUrl(query: string): string {
   const params = new URLSearchParams({ keyword: query });

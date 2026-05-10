@@ -1,5 +1,5 @@
 import { LRUCache } from 'lru-cache';
-import type { VisionResult } from '@print-suggester/shared';
+import type { VisionResult } from '../schemas.js';
 
 export const visionCache = new LRUCache<string, VisionResult>({
   max: 5000,

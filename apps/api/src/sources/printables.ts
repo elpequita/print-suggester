@@ -1,7 +1,7 @@
 import { LRUCache } from 'lru-cache';
 import { config } from '../config.js';
 import { logger } from '../logger.js';
-import type { PrintResult } from '@print-suggester/shared';
+import type { PrintResult } from '../schemas.js';
 
 // Printables exposes a GraphQL endpoint at /graphql/ but does not publish a public
 // schema. The exact operations are reverse-engineered from web client traffic and

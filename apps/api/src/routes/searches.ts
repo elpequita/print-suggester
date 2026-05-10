@@ -4,7 +4,7 @@ import {
   searchRequestSchema,
   type PrintResult,
   type SearchResponse,
-} from '@print-suggester/shared';
+} from '../schemas.js';
 import { computePHash } from '../lib/phash.js';
 import { visionCache } from '../lib/cache.js';
 import { analyzeImage, type SupportedMediaType } from '../lib/vision.js';

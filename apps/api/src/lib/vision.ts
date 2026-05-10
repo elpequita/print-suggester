@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { visionResultSchema, type VisionResult } from '@print-suggester/shared';
+import { visionResultSchema, type VisionResult } from '../schemas.js';
 import { config, visionProvider } from '../config.js';
 import { logger } from '../logger.js';
 

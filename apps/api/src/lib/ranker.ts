@@ -1,4 +1,4 @@
-import type { PrintResult, VisionResult } from '@print-suggester/shared';
+import type { PrintResult, VisionResult } from '../schemas.js';
 
 export function rankResults(
   vision: VisionResult,
