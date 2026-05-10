@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { logger as honoLogger } from 'hono/logger';
 import { searchesRoute } from './routes/searches.js';
+import { feedRoute } from './routes/feed.js';
 import { config, visionProvider } from './config.js';
 import { logger } from './logger.js';
 
@@ -10,6 +11,7 @@ app.use('*', honoLogger());
 
 app.get('/health', (c) => c.json({ ok: true, vision: visionProvider }));
 app.route('/searches', searchesRoute);
+app.route('/feed', feedRoute);
 
 serve({ fetch: app.fetch, port: config.PORT }, (info) => {
   logger.info('server.listening', { port: info.port, vision: visionProvider });
