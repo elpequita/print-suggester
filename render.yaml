@@ -4,21 +4,17 @@ services:
     runtime: node
     region: oregon
     plan: free
-    rootDir: .
-    buildCommand: pnpm install --frozen-lockfile=false && pnpm --filter @print-suggester/api build
+    buildCommand: pnpm install && pnpm --filter @print-suggester/api build
     startCommand: pnpm --filter @print-suggester/api start
-    autoDeployTrigger: commit
     healthCheckPath: /health
     envVars:
       - key: NODE_VERSION
-        value: 22
-      - key: PORT
-        value: 10000
+        value: "22"
       - key: GOOGLE_API_KEY
         sync: false
       - key: GEMINI_MODEL
         value: gemini-2.0-flash
       - key: RATE_LIMIT_PER_HOUR
-        value: 20
+        value: "20"
       - key: LOG_LEVEL
         value: info
